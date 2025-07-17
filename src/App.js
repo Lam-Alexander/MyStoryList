@@ -1,0 +1,90 @@
+import { useEffect, useState } from "react";
+import ErrorMessage from "./components/ErrorMessage";
+import Loader from "./components/Loader";
+import NavBar from "./components/NavBar";
+import NumResults from "./components/NumResults";
+import Search from "./components/Search";
+import Main from "./components/Main";
+import Box from "./components/Box";
+import MovieList from "./components/MovieList";
+import MovieDetails from "./components/MovieDetails";
+import WatchedSummary from "./components/WatchedSummary";
+import WatchedMovieList from "./components/WatchedMovieList";
+import { useMovies } from "./components/useMovies";
+import { useLocalStorageState } from "./components/useLocalStorageState";
+
+const KEY = `b94a1def`;
+
+const App = () => {
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const { movies, isLoading, error } = useMovies(query);
+
+  const [watched, setWatched] = useLocalStorageState([], "watched");
+
+  // const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState(() => {
+  //   const storedValue = localStorage.getItem("watched");
+  //   return JSON.parse(storedValue);
+  // });
+
+  const handleSelectMovie = (id) => {
+    setSelectedId((currID) => (id === currID ? null : id));
+  };
+
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+
+  const handleAddWatched = (movie) => {
+    setWatched((prevWatched) => [...prevWatched, movie]);
+
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
+  };
+
+  const handleDeleteWatched = (id) => {
+    setWatched((prevWatched) =>
+      prevWatched.filter((movie) => movie.imdbID !== id)
+    );
+  };
+
+  return (
+    <>
+      <NavBar>
+        <Search query={query} setQuery={setQuery} />
+        <NumResults movies={movies} />
+      </NavBar>
+
+      <Main>
+        <Box>
+          {isLoading && <Loader />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
+          {error && <ErrorMessage message={error} />}
+        </Box>
+
+        <Box>
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
+              watched={watched}
+              KEY={KEY}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMovieList
+                watched={watched}
+                onDeleteWatched={handleDeleteWatched}
+              />
+            </>
+          )}
+        </Box>
+      </Main>
+    </>
+  );
+};
+export default App;
