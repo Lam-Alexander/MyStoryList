@@ -23,7 +23,7 @@ const MovieDetails = ({
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
 
   const watchedUserRating = watched.find(
-    (movie) => movie.imdbID === selectedId
+    (movie) => movie.imdbID === selectedId,
   )?.userRating;
 
   const {
@@ -54,25 +54,13 @@ const MovieDetails = ({
     onCloseMovie();
   };
 
-  useKey('Escape', onCloseMovie)
-
-  // useEffect(() => {
-  //   const callBack = (e) => {
-  //     if (e.code === "Escape") {
-  //       onCloseMovie();
-  //     }
-  //   };
-  //   document.addEventListener("keydown", callBack);
-  //   return () => {
-  //     document.removeEventListener("keydown", callBack);
-  //   };
-  // }, [onCloseMovie]);
+  useKey("Escape", onCloseMovie);
 
   useEffect(() => {
     const getMovieDetails = async () => {
       setIsLoading(true);
       const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+        `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
       );
       const data = await res.json();
       setMovie(data);

@@ -22,12 +22,6 @@ const App = () => {
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
 
-  // const [watched, setWatched] = useState([]);
-  // const [watched, setWatched] = useState(() => {
-  //   const storedValue = localStorage.getItem("watched");
-  //   return JSON.parse(storedValue);
-  // });
-
   const handleSelectMovie = (id) => {
     setSelectedId((currID) => (id === currID ? null : id));
   };
@@ -38,13 +32,11 @@ const App = () => {
 
   const handleAddWatched = (movie) => {
     setWatched((prevWatched) => [...prevWatched, movie]);
-
-    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   };
 
   const handleDeleteWatched = (id) => {
     setWatched((prevWatched) =>
-      prevWatched.filter((movie) => movie.imdbID !== id)
+      prevWatched.filter((movie) => movie.imdbID !== id),
     );
   };
 

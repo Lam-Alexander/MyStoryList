@@ -4,24 +4,11 @@ import { useKey } from "./useKey";
 const Search = ({ query, setQuery }) => {
   const inputEl = useRef(null);
 
-  useKey('Enter',() => {
+  useKey("Enter", () => {
     if (document.activeElement === inputEl.current) return;
     inputEl.current.focus();
     setQuery("");
-  })
-
-  // useEffect(() => {
-  //   const callback = (e) => {
-     
-
-  //     if (e.code === "Enter") {
-  //       inputEl.current.focus();
-  //       setQuery("");
-  //     }
-  //   };
-  //   document.addEventListener("keydown", callback);
-  //   return () => document.removeEventListener("keydown", callback);
-  // }, [setQuery]);
+  });
 
   return (
     <input
